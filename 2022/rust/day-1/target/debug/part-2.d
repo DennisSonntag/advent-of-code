@@ -1,1 +1,0 @@
-/home/dennis/Projects/rust/advent-of-code/2022/rust/day-1/target/debug/part-2: /home/dennis/Projects/rust/advent-of-code/2022/rust/day-1/input.txt /home/dennis/Projects/rust/advent-of-code/2022/rust/day-1/src/bin/part-2.rs /home/dennis/Projects/rust/advent-of-code/2022/rust/day-1/src/lib.rs
