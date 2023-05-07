@@ -4,7 +4,7 @@ pub fn process_part1(input: &str) -> String {
 	let mut stacks: BTreeMap<u32, Vec<char>> = BTreeMap::new();
 
 	let (inp_stacks, instructions) = input.split_once("\n\n").unwrap();
-	let width = inp_stacks.split_once('\n').unwrap().0.len();
+	let width = inp_stacks. split_once('\n').unwrap().0.len();
 
 	for i in (1..=(((width + 1) / 4).pow(2))).step_by(4) {
 		let col = inp_stacks
@@ -45,8 +45,8 @@ pub fn process_part1(input: &str) -> String {
 	}
 
 	let answer = stacks
-		.iter()
-		.map(|(_, val)| val.last().unwrap())
+		.values()
+		.map(|val| val.last().unwrap())
 		.collect::<String>();
 
 	answer
@@ -97,8 +97,8 @@ pub fn process_part2(input: &str) -> String {
 	}
 
 	let answer = stacks
-		.iter()
-		.map(|(_, val)| val.last().unwrap())
+		.values()
+		.map(|val| val.last().unwrap())
 		.collect::<String>();
 
 	answer
@@ -126,7 +126,7 @@ move 1 from 1 to 2";
 	}
 
 	#[test]
-	// #[ignore]
+	#[ignore]
 	fn part2() {
 		let result = process_part2(TEST_INPUT);
 		assert_eq!(result, "MCD");

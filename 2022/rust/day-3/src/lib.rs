@@ -11,9 +11,7 @@ pub fn process_part1(input: &str) -> usize {
 	input
 		.lines()
 		.map(|line| {
-			let half_len = line.len() / 2;
-			let compartment_a = &line[..half_len];
-			let compartment_b = &line[half_len..];
+			let (compartment_a, compartment_b) = line.split_at(line.len() / 2);
 
 			let common_char = compartment_a
 				.chars()

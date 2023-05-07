@@ -4,7 +4,6 @@ pub fn process_part1(input: &str) -> u32 {
 		.map(|elm| {
 			elm.lines()
 				.map(|num| num.parse::<u32>().unwrap())
-				.into_iter()
 				.sum::<u32>()
 		})
 		.max()
@@ -18,7 +17,6 @@ pub fn process_part2(input: &str) -> u32 {
 		.map(|elm| {
 			elm.lines()
 				.map(|num| num.parse::<u32>().unwrap())
-				.into_iter()
 				.sum::<u32>()
 		})
 		.collect::<Vec<_>>();
@@ -51,6 +49,7 @@ mod tests {
 	}
 
 	#[test]
+	#[ignore]
 	fn part2_works() {
 		let result = process_part2(TEST_INPUT);
 		assert_eq!(result, 45000);

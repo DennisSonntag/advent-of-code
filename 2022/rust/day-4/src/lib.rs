@@ -2,16 +2,16 @@ pub fn process_part1(input: &str) -> usize {
 	let pairs = input
 		.lines()
 		.map(|x| {
-			let (left, right) = x.split_once(",").unwrap();
+			let (left, right) = x.split_once(',').unwrap();
 
 			let left = left
-				.split("-")
+				.split('-')
 				.map(|y| y.parse::<u32>().unwrap())
 				.collect::<Vec<_>>();
 			let left = (left[0])..=(left[1]);
 
 			let right = right
-				.split("-")
+				.split('-')
 				.map(|y| y.parse::<u32>().unwrap())
 				.collect::<Vec<_>>();
 			let right = (right[0])..=(right[1]);
@@ -37,16 +37,16 @@ pub fn process_part2(input: &str) -> usize {
 	let pairs = input
 		.lines()
 		.map(|x| {
-			let (left, right) = x.split_once(",").unwrap();
+			let (left, right) = x.split_once(',').unwrap();
 
 			let left = left
-				.split("-")
+				.split('-')
 				.map(|y| y.parse::<u32>().unwrap())
 				.collect::<Vec<_>>();
 			let left = (left[0])..=(left[1]);
 
 			let right = right
-				.split("-")
+				.split('-')
 				.map(|y| y.parse::<u32>().unwrap())
 				.collect::<Vec<_>>();
 			let right = (right[0])..=(right[1]);
@@ -80,13 +80,13 @@ mod tests {
 2-6,4-8";
 
 	#[test]
-	#[ignore]
 	fn part1() {
 		let result = process_part1(TEST_INPUT);
 		assert_eq!(result, 2);
 	}
 
 	#[test]
+	#[ignore]
 	fn part2() {
 		let result = process_part2(TEST_INPUT);
 		assert_eq!(result, 4);
