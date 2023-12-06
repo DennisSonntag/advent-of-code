@@ -1,59 +1,72 @@
 #![allow(unused, dead_code, clippy::panic)]
 
-enum Color {
-    Red,
-    Green,
-    Blue,
+use std::ops::Add;
+
+#[derive(Debug, Clone)]
+struct Count {
+    color: String,
+    count: u32,
 }
 
-struct Count {
-    color: Color,
-    amount: u32,
+#[derive(Debug, Clone, Default)]
+struct Game {
+    id: u32,
+    sets: Vec<Count>,
+}
+
+fn process_line(line: &str) -> Game {
+    let (id, games) = line.split_once(": ").unwrap();
+
+    let id = id.split_once(' ').unwrap().1.parse::<u32>().unwrap();
+
+    let games = games
+        .split("; ")
+        .flat_map(|set| {
+            set.split(", ").map(|x| {
+                let (left, right) = x.split_once(' ').unwrap();
+                let count = left.parse::<u32>().unwrap();
+                let color = right.to_string();
+
+                Count { color, count }
+            })
+        })
+        .collect::<Vec<_>>();
+
+    // .fold(
+    //     Game {
+    //         id,
+    //         ..Default::default()
+    //     },
+    //     |mut acc, x| {
+    //         match x.color.as_str() {
+    //             "red" => acc.red += x.count,
+    //             "green" => acc.green += x.count,
+    //             "blue" => acc.blue += x.count,
+    //             _ => {}
+    //         };
+    //         acc
+    //     },
+    // );
+    Game { id, sets: games }
 }
 
 pub fn process_part1(input: &str) -> u32 {
-    let thing = input
+    input
         .lines()
-        .map(|line| {
-            let id = line
-                .split_once(':')
-                .unwrap()
-                .0
-                .split_once(' ')
-                .unwrap()
-                .1
-                .parse::<u32>()
-                .unwrap();
-            let sets = line
-                .split_once(':')
-                .unwrap()
-                .1
-                .split(';')
-                .map(|set| {
-                    set.split(',')
-                        .map(|x| {
-                            let (count, right) = x.split_once(' ').unwrap();
-                            let count = count.parse::<u32>().unwrap();
-                            let color = match right {
-                                "red" => Color::Red,
-                                "green" => Color::Green,
-                                "blue" => Color::Blue,
-                            };
-
-                            return Count {
-                                color,
-                                amount: count,
-                            };
-                        })
-                        .collect::<Vec<_>>()
-                })
-                .collect::<Vec<_>>();
-            sets
+        .map(process_line)
+        .filter(|game| {
+            game.sets.iter().all(|set| {
+                if set.color == "red" {
+                    return set.count <= 12;
+                } else if set.color == "green" {
+                    return set.count <= 13;
+                } else {
+                    return set.count <= 14;
+                }
+            })
         })
-        .collect::<Vec<_>>();
-    println!("{thing:?}");
-
-    14
+        .map(|game| game.id)
+        .sum()
 }
 
 pub fn process_part2(input: &str) -> u32 {

@@ -1,4 +1,4 @@
-use day_1::process_part1;
+use day_2::process_part1;
 
 const FILE: &str = include_str!("../../input.txt");
 
