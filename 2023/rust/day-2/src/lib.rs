@@ -1,53 +1,39 @@
-#![allow(unused, dead_code, clippy::panic)]
-
-use std::ops::Add;
-
 #[derive(Debug, Clone)]
-struct Count {
-    color: String,
+struct Cube<'a> {
+    color: &'a str,
     count: u32,
 }
 
 #[derive(Debug, Clone, Default)]
-struct Game {
+struct Game<'a> {
     id: u32,
-    sets: Vec<Count>,
+    rounds: Vec<Cube<'a>>,
+}
+
+#[derive(Debug, Clone, Default)]
+struct Colors {
+    red: Vec<u32>,
+    green: Vec<u32>,
+    blue: Vec<u32>,
 }
 
 fn process_line(line: &str) -> Game {
-    let (id, games) = line.split_once(": ").unwrap();
+    let (id, rounds) = line.split_once(": ").unwrap();
 
     let id = id.split_once(' ').unwrap().1.parse::<u32>().unwrap();
 
-    let games = games
+    let rounds = rounds
         .split("; ")
         .flat_map(|set| {
             set.split(", ").map(|x| {
-                let (left, right) = x.split_once(' ').unwrap();
+                let (left, color) = x.split_once(' ').unwrap();
                 let count = left.parse::<u32>().unwrap();
-                let color = right.to_string();
 
-                Count { color, count }
+                Cube { color, count }
             })
         })
-        .collect::<Vec<_>>();
-
-    // .fold(
-    //     Game {
-    //         id,
-    //         ..Default::default()
-    //     },
-    //     |mut acc, x| {
-    //         match x.color.as_str() {
-    //             "red" => acc.red += x.count,
-    //             "green" => acc.green += x.count,
-    //             "blue" => acc.blue += x.count,
-    //             _ => {}
-    //         };
-    //         acc
-    //     },
-    // );
-    Game { id, sets: games }
+        .collect();
+    Game { id, rounds }
 }
 
 pub fn process_part1(input: &str) -> u32 {
@@ -55,14 +41,11 @@ pub fn process_part1(input: &str) -> u32 {
         .lines()
         .map(process_line)
         .filter(|game| {
-            game.sets.iter().all(|set| {
-                if set.color == "red" {
-                    return set.count <= 12;
-                } else if set.color == "green" {
-                    return set.count <= 13;
-                } else {
-                    return set.count <= 14;
-                }
+            game.rounds.iter().all(|set| match set.color {
+                "red" => set.count <= 12,
+                "green" => set.count <= 13,
+                "blue" => set.count <= 14,
+                _ => false,
             })
         })
         .map(|game| game.id)
@@ -70,7 +53,32 @@ pub fn process_part1(input: &str) -> u32 {
 }
 
 pub fn process_part2(input: &str) -> u32 {
-    unimplemented!();
+    input
+        .lines()
+        .map(process_line)
+        .map(|game| {
+            let colors = game.rounds.iter().fold(
+                Colors {
+                    red: Vec::new(),
+                    green: Vec::new(),
+                    blue: Vec::new(),
+                },
+                |mut acc, x| {
+                    match x.color {
+                        "red" => acc.red.push(x.count),
+                        "blue" => acc.blue.push(x.count),
+                        "green" => acc.green.push(x.count),
+                        _ => {}
+                    };
+                    acc
+                },
+            );
+
+            return colors.red.iter().max().unwrap()
+                * colors.green.iter().max().unwrap()
+                * colors.blue.iter().max().unwrap();
+        })
+        .sum()
 }
 
 #[cfg(test)]
@@ -83,15 +91,15 @@ Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
 
     #[test]
+    #[ignore]
     fn part1_works() {
         let result = process_part1(TEST_INPUT);
         assert_eq!(result, 8);
     }
 
     #[test]
-    #[ignore]
     fn part2_works() {
         let result = process_part2(TEST_INPUT);
-        assert_eq!(result, 281);
+        assert_eq!(result, 2286);
     }
 }
