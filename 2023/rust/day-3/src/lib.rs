@@ -1,6 +1,7 @@
 pub fn process_part1(input: &str) -> u32 {
-    let chars input.lines().enumerate().map(|(y, line)| line.chars().enumerate());
+    let chars = input.lines().enumerate().map(|(y, line)| line.chars().enumerate().map(|(x, char)| {
 
+    }));
 
     14
 }
